@@ -237,10 +237,10 @@ class InfoHandler(BaseHandler):
         self.render_template('%s.html' % (page))
 
 def add_pairs(pair_data):
-    for id, bt1, bt2 in pair_data:
+    for id, n1, n2, bt1, bt2 in pair_data:
         Pair.add(
-            'Donor ' + str(id), '@Donor' + str(id), bt1,
-            'Recipient ' + str(id), '@Recipient' + str(id), bt2)
+            n1, '@Donor' + str(id), bt1,
+            n2, '@Recipient' + str(id), bt2)
 
 class Test1(BaseHandler):
     def post(self):
@@ -248,13 +248,13 @@ class Test1(BaseHandler):
         Pair.clear()
         Person.clear()
         data = [
-            [1, 'A', 'AB'],
-            [2, 'A', 'O'],
-            [3, 'AB', 'B'],
-            [4, 'B', 'A'],
-            [5, 'AB', 'A'],
-            [6, 'B', 'O'],
-            [7, 'O', 'O'],
+            [1, 'Dana', 'Ross', 'A', 'AB'],
+            [2, 'David', 'Rebecca', 'A', 'O'],
+            [3, 'Daniel', 'Ricki', 'AB', 'B'],
+            [4, 'Daffy', 'Rose', 'B', 'A'],
+            [5, 'Donald', 'Ronald', 'AB', 'A'],
+            [6, 'Dwight', 'Ruth', 'B', 'O'],
+            [7, 'Dawn', 'Rudy', 'O', 'O'],
         ]
         add_pairs(data)
         self.redirect('/pairs')
@@ -265,8 +265,8 @@ class Test2(BaseHandler):
         Pair.clear()
         Person.clear()
         data = [
-            [1, 'A', 'AB'],
-            [2, 'B', 'A'],
+            [1, 'David', 'Ruth', 'A', 'AB'],
+            [2, 'Daniel', 'Ricki', 'B', 'A'],
         ]
         add_pairs(data)
         self.redirect('/pairs')

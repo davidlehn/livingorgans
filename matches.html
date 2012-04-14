@@ -1,8 +1,41 @@
 {% extends "base.html" %}
 {% block title %}Matches{% endblock %}
+
+{% block head %}
+{{ super() }}
+<script type="text/javascript" src="/static/springy.js"></script>
+<script type="text/javascript" src="/static/springyui.js"></script>
+{% endblock %}
+
 {% block content %}
 {% if groups %}
+
+<script type="text/javascript">
+var graph = new Graph();
+var dana_ross = graph.newNode({label: 'Dana + Ross'});
+var daffy_rose = graph.newNode({label: 'Daffy + Rose'});
+var daniel_ricki = graph.newNode({label: 'Daniel + Ricki'});
+graph.newEdge(dana_ross, daffy_rose);
+graph.newEdge(daffy_rose, daniel_ricki);
+graph.newEdge(daniel_ricki, dana_ross);
+
+jQuery(function() {
+var springy = jQuery('#canvas').springy({graph:graph});
+});
+
+</script>
+
+
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+      <li class="active"><a href="#list" data-toggle="tab">List</a></li>
+      <li><a href="#graph" data-toggle="tab">Graph</a></li>
+  </ul>
+  <div class="tab-content">
+      <div class="tab-pane active" id="list">
+
 <div class="groups">
+  <!--
   {% for g in groups %}
    <div>Group:
      <ul>
@@ -16,7 +49,44 @@
      </ul>
     </div>
   {% endfor %}
+  -->
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Donor</th>
+        <th>Donor Blood Type</th>
+        <th>Recipient</th>
+        <th>Recipient Blood Type</th>
+    </thead>
+    <tbody>
+      {% for g in groups %}
+      <tr class="t-group"><td colspan="5">Chain</td></tr>
+        {% for p in g %}
+        <tr>
+          <td><a href="/pairs/{{ p.id }}">{{ p.id }}</a></td>
+          <td>{{ p.donor.name|e }}</td>
+          <td>{{ p.donor.blood_type }}</td>
+          <td>{{ p.recipient.name|e }}</td>
+          <td>{{ p.recipient.blood_type }}</td>
+        </tr>
+        {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
+
+      </div>
+      <div class="tab-pane" id="graph">
+
+<div class="groups">
+  <canvas id="canvas" width="720" height="480" />
+</div>
+
+      </div>
+  </div>
+</div>
+
 {% else %}
 <p>No matches.</p>
 {% endif %}

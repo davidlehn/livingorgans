@@ -17,3 +17,7 @@ body {
   margin-bottom: .5em;
   border-bottom: thin solid #eee;
 }
+.t-group {
+  background: #666;
+  color: #fff;
+}
