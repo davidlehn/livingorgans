@@ -4,7 +4,9 @@
 {% if matches %}
 <div class="matches">
   {% for m in matches %}
-     <div>Match: {{ m }}</div>
+     {% for p in m %}
+        <div>Match: {{ p.Id }}</div>
+     {% endfor %}
   {% endfor %}
 </div>
 {% else %}

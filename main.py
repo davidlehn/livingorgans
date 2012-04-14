@@ -20,6 +20,8 @@ from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext import deferred
 from google.appengine.api import files
 
+import Codeathon as alg
+
 logging.getLogger().setLevel(logging.DEBUG)
 
 class BaseHandler(webapp2.RequestHandler):
@@ -109,9 +111,9 @@ class Pair(ndb.Model):
 class PairsHandler(BaseHandler):
     def get(self):
         q = Pair.query()
-        pairs, c, more = q.fetch_page(1)
+        pairs, c, more = q.fetch_page(100)
         while more:
-            res, c, more = q.fetch_page(1, start_cursor=c)
+            res, c, more = q.fetch_page(100, start_cursor=c)
             pairs.extend(res)
         args = {
             'pairs': pairs,
@@ -121,12 +123,12 @@ class PairsHandler(BaseHandler):
 
     def post(self):
         Pair.add(
-           self.request.get(pre + "d_name"),
-           self.request.get(pre + "d_contact"),
-           self.request.get(pre + "d_blood_type"),
-           self.request.get(pre + "r_name"),
-           self.request.get(pre + "r_contact"),
-           self.request.get(pre + "r_blood_type"))
+           self.request.get("d_name"),
+           self.request.get("d_contact"),
+           self.request.get("d_blood_type"),
+           self.request.get("r_name"),
+           self.request.get("r_contact"),
+           self.request.get("r_blood_type"))
         logging.info("pair created")
         self.redirect('/pairs')
 
@@ -174,35 +176,43 @@ class EditPairHandler(BaseHandler):
         self.render_template('pair-edit.html', **args)
 
 def find_groups(pairs):
-   return []
+    g = alg.Graph()
+    for p in pairs:
+        p = g.add(p['id'], p['donor'], p['recipient'])
+    g.findEdges()
+    return g.findCycle(g.list[0])
 
 class MatchesHandler(BaseHandler):
     def get(self):
         q = Pair.query()
-        pairs = q.fetch(100)
+        pairs, c, more = q.fetch_page(100)
         _pairs = []
-        #while len(pairs):
-        #    for p in pairs:
-        #        d = p.donor.get()
-        #        r = p.recipient.get()
-        #        _pairs.append({
-        #            'donor': {
-        #                'name': d.name,
-        #                'contact': d.contact,
-        #                'blood_type': d.blood_type,
-        #            },
-        #            'recipient': {
-        #                'name': r.name,
-        #                'contact': r.contact,
-        #                'blood_type': r.blood_type,
-        #            }
-        #        })
-        #    pairs = q.fetch(100)
+        while more:
+            res, c, more = q.fetch_page(100, start_cursor=c)
+            pairs.extend(res)
+
+        for p in pairs:
+            d = p.donor.get()
+            r = p.recipient.get()
+            _pairs.append({
+                'id': p.key.id(),
+                'donor': {
+                    'name': d.name,
+                    'contact': d.contact,
+                    'blood_type': d.blood_type,
+                },
+                'recipient': {
+                    'name': r.name,
+                    'contact': r.contact,
+                    'blood_type': r.blood_type,
+                }
+            })
 
         groups = find_groups(_pairs)
+        logging.info(str(groups))
 
         args = {
-            'groups': groups,
+            'matches': groups,
         }
         self.render_template('matches.html', **args)
 

@@ -1,8 +1,8 @@
 class Graph:
     def __init__(self):
         self.list = [];
-    def add(self, dbt, rbt):
-        self.list.append(Pair(dbt,rbt))
+    def add(self, id, dbt, rbt):
+        self.list.append(Pair(id, dbt,rbt))
         
     def findEdges(self):
         for thing in self.list:
@@ -22,13 +22,6 @@ class Graph:
                     elif Potential_Donor.Donor_Type == "B" and (Potential_Recipient.Recipient_Type == "AB" or Potential_Recipient.Recipient_Type == "B"):
                         Potential_Donor.otherPairs.append(Potential_Recipient)
 
-                            
-                            
-                            
-                            
-                            
-                            
-    
     def findCycle(self, start):
         for node in self.list:
             node.visit = False
@@ -60,7 +53,8 @@ class Graph:
 #        return max
 
 class Pair:
-    def __init__(self, DBT,RBT):
+    def __init__(self, id, DBT,RBT):
+        self.Id=id
         self.Donor_Type=DBT
         self.Recipient_Type=RBT
         self.otherPairs=[]
