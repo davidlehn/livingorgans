@@ -98,7 +98,7 @@ class Pair(ndb.Model):
     @staticmethod
     def add(dn, dc, dbt, rn, rc, rbt):
         d = Person(name=dn, contact=dc, blood_type=dbt)
-        r = Person(name=dn, contact=dc, blood_type=dbt)
+        r = Person(name=rn, contact=rc, blood_type=rbt)
         d.put()
         r.put()
 
@@ -176,9 +176,11 @@ class EditPairHandler(BaseHandler):
         self.render_template('pair-edit.html', **args)
 
 def find_groups(pairs):
+    pair_map = {}
     g = alg.Graph()
     for p in pairs:
-        p = g.add(p['id'], p['donor'], p['recipient'])
+        pair = g.add(p['id'], p['donor'], p['recipient'])
+        pair_map[p['id']] = pair
     g.findEdges()
     return g.findCycle(g.list[0])
 
@@ -220,22 +222,40 @@ class InfoHandler(BaseHandler):
     def get(self, page):
         self.render_template('%s.html' % (page))
 
+def add_pairs(pair_data):
+    for id, bt1, bt2 in pair_data:
+        Pair.add(
+            'Donor ' + str(id), '@Donor' + str(id), bt1,
+            'Recipient ' + str(id), '@Recipient' + str(id), bt2)
+
 class Test1(BaseHandler):
     def post(self):
         logging.info('TEST1')
         Pair.clear()
         Person.clear()
-        Pair.add(
-           'Donor 1', '@D1', 'A',
-           'Recipient 1', '@R1', 'AB')
-        Pair.add(
-           'Donor 2', '@D2', 'B',
-           'Recipient 2', '@R2', 'A')
+        data = [
+            [1, 'A', 'AB'],
+            [2, 'A', 'O'],
+            [3, 'AB', 'B'],
+            [4, 'B', 'A'],
+            [5, 'AB', 'A'],
+            [6, 'B', 'O'],
+            [7, 'O', 'O'],
+        ]
+        add_pairs(data)
         self.redirect('/pairs')
 
 class Test2(BaseHandler):
     def post(self):
-        pass
+        logging.info('TEST1')
+        Pair.clear()
+        Person.clear()
+        data = [
+            [1, 'A', 'AB'],
+            [2, 'B', 'A'],
+        ]
+        add_pairs(data)
+        self.redirect('/pairs')
 
 class Test3(BaseHandler):
     def post(self):

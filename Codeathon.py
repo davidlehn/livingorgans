@@ -1,8 +1,11 @@
 class Graph:
     def __init__(self):
         self.list = [];
+
     def add(self, id, dbt, rbt):
-        self.list.append(Pair(id, dbt,rbt))
+        pair = Pair(id, dbt,rbt)
+        self.list.append(pair)
+        return pair
         
     def findEdges(self):
         for thing in self.list:
