@@ -76,11 +76,10 @@ class Person(ndb.Model):
     @staticmethod
     def clear():
         q = Person.query()
-        data = q.fetch(100)
+        data = q.fetch(100, keys_only=True)
         while len(data):
-            for d in data:
-                d.delete()
-            data = q.fetch(100)
+            ndb.delete_multi(data)
+            data = q.fetch(100, keys_only=True)
 
 class Pair(ndb.Model):
     donor = ndb.KeyProperty(required=True, kind=Person)
@@ -89,11 +88,10 @@ class Pair(ndb.Model):
     @staticmethod
     def clear():
         q = Pair.query()
-        data = q.fetch(100)
+        data = q.fetch(100, keys_only=True)
         while len(data):
-            for d in data:
-                d.delete()
-            data = q.fetch(100)
+            ndb.delete_multi(data)
+            data = q.fetch(100, keys_only=True)
 
     @staticmethod
     def add(dn, dc, dbt, rn, rc, rbt):
@@ -110,7 +108,11 @@ class Pair(ndb.Model):
 
 class PairsHandler(BaseHandler):
     def get(self):
-        pairs = Pair.query().fetch(100)
+        q = Pair.query()
+        pairs, c, more = q.fetch_page(1)
+        while more:
+            res, c, more = q.fetch_page(1, start_cursor=c)
+            pairs.extend(res)
         args = {
             'pairs': pairs,
         }
