@@ -175,14 +175,28 @@ class EditPairHandler(BaseHandler):
         args = {}
         self.render_template('pair-edit.html', **args)
 
-def find_groups(pairs):
-    pair_map = {}
+def find_groups(pairs, start=None):
     g = alg.Graph()
+    pair_map = {}
     for p in pairs:
-        pair = g.add(p['id'], p['donor'], p['recipient'])
-        pair_map[p['id']] = pair
+        pair = g.add(
+                p['id'],
+                p['donor']['blood_type'],
+                p['recipient']['blood_type'])
+        pair_map[p['id']] = p
     g.findEdges()
-    return g.findCycle(g.list[0])
+
+    # find groups for each starting pair
+    cycles = g.findAllCycles()
+    groups = []
+    for cycle in cycles:
+        group = []
+        for pair in cycle:
+            group.append(pair_map[pair.Id])
+        groups.append(group)
+    logging.info('XXX' + str(groups))
+
+    return groups
 
 class MatchesHandler(BaseHandler):
     def get(self):
@@ -214,7 +228,7 @@ class MatchesHandler(BaseHandler):
         logging.info(str(groups))
 
         args = {
-            'matches': groups,
+            'groups': groups,
         }
         self.render_template('matches.html', **args)
 

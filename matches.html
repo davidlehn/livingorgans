@@ -1,12 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Matches{% endblock %}
 {% block content %}
-{% if matches %}
-<div class="matches">
-  {% for m in matches %}
-     {% for p in m %}
-        <div>Match: {{ p.Id }}</div>
+{% if groups %}
+<div class="groups">
+  {% for g in groups %}
+   <div>Group:
+     <ul>
+     {% for p in g %}
+       <li>
+       <a href="/pairs/{{ p.id }}">{{ p.id }}</a>:
+       Donor: {{ p.donor.name|e }}/{{ p.donor.blood_type }}
+       Recipient: {{ p.recipient.name|e }}/{{ p.recipient.blood_type }}
+       </li>
      {% endfor %}
+     </ul>
+    </div>
   {% endfor %}
 </div>
 {% else %}
