@@ -7,4 +7,3 @@ This is an entry into the Hokie Health Code-a-thon at TechPad in Blacksburg,
 VA.
 
 April 13-14, 2012
-123
