@@ -50,9 +50,10 @@ class Graph:
             node.value = 0
         ans = []
         for node in self.list:
-               temp = self.startalldfs(node,node)
-               for a in temp:
-                   ans.append(a)
+               if node.visit == False:
+                   temp = self.startalldfs(node,node)
+                   for a in temp:
+                       ans.append(a)
         return ans
         
     def startalldfs (self, node,start):
