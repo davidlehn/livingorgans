@@ -1,0 +1,4 @@
+*~
+*.sw[po]
+data.db
+*.py[co]

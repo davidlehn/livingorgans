@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Pairs{% endblock %}
+{% block content %}
+{% if pairs %}
+<div class="pairs">
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Donor</th>
+        <th>Donor Blood Type</th>
+        <th>Recipient</th>
+        <th>Recipient Blood Type</th>
+    </thead>
+    <tbody>
+      {% for p in pairs %}
+      <tr>
+        <td><a href="/pairs/{{ p.key.id() }}">{{ p.key.id() }}</a></td>
+        <td>{{ p.donor.get().name|default('-')|e }} ({{ p.donor.get().contact|default('-')|e }})</td>
+        <td>{{ p.donor.get().blood_type|default('-')|e }}</td>
+        <td>{{ p.recipient.get().name|default('-')|e }} ({{ p.recipient.get().contact|default('-')|e }})</td>
+        <td>{{ p.recipient.get().blood_type|default('-')|e }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p>No pairs.</p>
+{% endif %}
+<br/>
+<a class="btn btn-success" href="/pairs/-/add"><i class="icon-plus icon-white"></i> Add Pair</a>
+{% endblock %}

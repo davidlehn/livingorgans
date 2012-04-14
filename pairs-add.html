@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Create Fortune Cookie{% endblock %}
+{% block script %}
+$(document).ready(function() {
+  $('#create').click(function() {
+    $('#pair').ajaxSubmit({
+      url: '/pairs/'
+    });
+    return false;
+  });
+  $('.demo-buttons button').click(function() {
+    $.ajax({
+      type: 'POST',
+      url: '/pairs/-/tests/' + $(this).attr('data-test'),
+      success: function() {
+        window.location = '/pairs';
+      },
+      error: function() {
+        console.error('TEST ERROR', arguments);
+      }
+    });
+    return false;
+  });
+});
+{% endblock %}
+{% block content %}
+<h2>New Donor and Recipient Pair</h2>
+<div>
+  <div class="demo-buttons">
+    <span class="label label-important">Load Demo Data</span>:
+    <button class="btn" data-test="1">Demo 1</button>
+    <button class="btn" data-test="2">Demo 2</button>
+    <button class="btn" data-test="3">Demo 3</button>
+  </div>
+
+  <p>Please enter information for a new donor and recipient pair:</p>
+
+  <form id="pair" class="form-horizontal" action="/pairs/" method="post">
+    <fieldset>
+      <legend>Donor Information</legend>
+      <div class="control-group">
+        <label class="control-label" for="d_name">Name</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="d_name" name="d_name" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="d_contact">Contact</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="d_contact" name="d_contact" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="d_blood_type">Blood Type</label>
+        <div class="controls">
+        <select id="d_blood_type" name="d_blood_type">
+            <option></option>
+            <option>A</option>
+            <option>B</option>
+            <option>AB</option>
+            <option>O</option>
+        </select>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Recipient Information</legend>
+      <div class="control-group">
+        <label class="control-label" for="r_name">Name</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="r_name" name="r_name" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="r_contact">Contact</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="r_contact" name="r_contact" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="r_blood_type">Blood Type</label>
+        <div class="controls">
+        <select id="r_blood_type" name="r_blood_type">
+            <option></option>
+            <option>A</option>
+            <option>B</option>
+            <option>AB</option>
+            <option>O</option>
+        </select>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><i class="icon-plus icon-white"></i> Create Pair</button>
+        <button type="btn">Cancel</button>
+      </div>
+    </fieldset>
+  </form>
+</div>
+{% endblock %}

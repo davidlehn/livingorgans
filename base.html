@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head -%}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <title>{% block title %}...{% endblock %} - Living Organs</title>
+    {#-<meta name="title" content="{% block title %}Home{% endblock %} - {{ site.name|e }} - IFCDB" />-#}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {#<meta name="description" content="{% block meta_description %}Living Organs - Internet Fortune Cookie Database{% endblock %}" />#}
+    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}" />
+    <meta name="author" content="{% block meta_author %}{% endblock %}" />
+
+    <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Icons -->
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"/>
+    <link rel="apple-touch-icon" href="/static/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/apple-touch-icon-114x114.png"/>
+
+    <!-- Style -->
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-responsive.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lo.css"/>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+{#
+    {% if use_forms -%}
+    <script type="text/javascript" src="/static/jquery.form.js"></script>
+    {%- endif %}
+#}
+    <!-- <script type="text/javascript" src="/static/lo.js"></script> -->
+    <script type="text/javascript">
+    {% block script -%}{%- endblock %}
+    </script>
+    {%- endblock %}
+  </head>
+
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Living Organs</a>
+          <ul class="nav">
+            <!--<li><i class="icon-home icon-white"></i> <a href="#">Home</a></li>-->
+            <li><a href="/"><i class="icon-home icon-white"></i> Home</a></li>
+            <li><a href="/pairs"><i class="icon-user icon-white"></i> Pairs</a></li>
+            <li><a href="/matches"><i class="icon-retweet icon-white"></i> Matches</a></li>
+            <li><a href="/pairs/-/add"><i class="icon-plus icon-white"></i> Add</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container">
+      <div class="row">
+        <div class="span2">
+          <!--Sidebar -->
+          <div class="sidebar">
+            <ul class="unstyled">
+              <li><a href="/"><i class="icon-home"></i> Living Organs</a></li>
+              <li><a href="/pairs"><i class="icon-user"></i> Pairs</a></li>
+              <li><a href="/matches"><i class="icon-retweet"></i> Matches</a></li>
+              <li><a href="/pairs/-/add"><i class="icon-plus"></i> Add</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="span8">
+          <!--Main -->
+          <div class="top-header">
+            <h1>Living Organs <small>Using the Cloud to Crowd Source Transplants</small></h1>
+            <!--<h3><strong>THE</strong> source for brief moments of amusement and enlightenment.</h3>-->
+            <hr/>
+            {% if notice -%}
+            <div class="notice">
+              {{ notice }}
+            </div>
+            <hr/>
+            {%- endif -%}
+          </div>
+          <div class="content">
+            {% block content %}{% endblock %}
+          </div>
+        </div>
+        <div class="span2">
+          <h3></h3>
+          <p></p>
+          <p></p>
+          <p></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span12 footer">
+          <hr/>
+          <span><a href="/about">About</a></span> |
+          <span><a href="/contact">Contact</a></span> |
+          <span><a href="/legal">Legal</a></span> |
+          <span><a href="/terms">Terms of Service</a></span> |
+          <span><a href="/privacy">Privacy Policy</a></span> |
+          <span><a href="/help">Help</a></span> |
+          <span><a href="/api">API</a></span>
+          <br/>
+          <span>Copyright &copy; 2012 Living Organs</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
